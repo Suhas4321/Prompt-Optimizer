@@ -17,7 +17,7 @@ env_path = Path(__file__).parent.parent.parent / '.env'
 load_dotenv(dotenv_path=env_path)
 
 @pytest.mark.asyncio
-async def test_train_basic(mocker):
+async def test_train_basic(mocker, mock_env_vars):
     # Mock the GEPA optimize function
     mock_gepa = mocker.patch('gepa.optimize')
     mock_gepa.return_value = 'optimized_prompt'
@@ -48,10 +48,10 @@ async def test_train_basic(mocker):
     
     assert result is not None
     assert hasattr(result, 'status')
-    assert hasattr(result, 'optimized_prompt')
+    assert hasattr(result, 'prompt')
 
 @pytest.mark.asyncio
-async def test_train_invalid_input(mocker):
+async def test_train_invalid_input(mocker, mock_env_vars):
     # Mock the GEPA optimize function
     mock_gepa = mocker.patch('gepa.optimize')
     mock_gepa.return_value = 'optimized_prompt'
@@ -68,7 +68,7 @@ async def test_train_invalid_input(mocker):
     assert "Model name is required" in str(exc_info.value)
 
 @pytest.mark.asyncio
-async def test_train_empty_dataset(mocker):
+async def test_train_empty_dataset(mocker, mock_env_vars):
     # Mock the GEPA optimize function
     mock_gepa = mocker.patch('gepa.optimize')
     mock_gepa.return_value = 'optimized_prompt'

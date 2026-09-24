@@ -1,11 +1,13 @@
 # 🚀 GEPA Universal Prompt Optimizer
 
-[![PyPI version](https://badge.fury.io/py/gepa-optimizer.svg)](https://badge.fury.io/py/gepa-optimizer)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/Suhas4321/Prompt-Optimizer/workflows/Tests/badge.svg)](https://github.com/Suhas4321/Prompt-Optimizer/actions)
 
-> **A production-ready Python library for universal prompt optimization using the GEPA (Generative Evaluation and Prompt Adaptation) framework. Built for developers who need reliable, scalable prompt optimization with comprehensive evaluation metrics.**
+> **An alpha-stage Python framework for experimenting with prompt optimization
+> across text, vision, and multimodal tasks using configurable evaluators and
+> token budgets.**
+
+[Try the Hugging Face demo](https://huggingface.co/spaces/Suhasdev/Universal-prompt-Optimizer)
 
 ## 🎯 What is GEPA Optimizer?
 
@@ -16,7 +18,7 @@ GEPA Optimizer is a sophisticated framework that automatically improves prompts 
 - **🔄 Universal Prompt Optimization**: Works with any LLM provider (OpenAI, Anthropic, Google, Hugging Face)
 - **👁️ Multi-Modal Support**: Optimize prompts for vision-capable models (GPT-4V, Claude-3, Gemini)
 - **📊 Advanced Evaluation**: Comprehensive metrics for UI tree extraction and general prompt performance
-- **🏭 Production Ready**: Enterprise-grade reliability with async support, error handling, and monitoring
+- **🧪 Research-oriented implementation**: Async execution, validation, logging, and extension points for experimentation
 - **⚙️ Flexible Configuration**: Easy-to-use configuration system for any optimization scenario
 - **💰 Cost Optimization**: Built-in budget controls and cost estimation
 - **🎨 UI Tree Extraction**: Specialized for optimizing UI interaction and screen understanding tasks
@@ -26,8 +28,12 @@ GEPA Optimizer is a sophisticated framework that automatically improves prompts 
 
 ### Installation
 
+The package is not currently published on PyPI. Install it from source:
+
 ```bash
-pip install gepa-optimizer
+git clone https://github.com/Suhas4321/Prompt-Optimizer.git
+cd Prompt-Optimizer
+python -m pip install -e .
 ```
 
 ### Basic Usage
@@ -322,7 +328,7 @@ gepa-optimizer/
 
 1. **Install the package:**
    ```bash
-   pip install gepa-optimizer
+   python -m pip install -e .
    ```
 
 2. **Set up environment variables:**
@@ -352,11 +358,10 @@ gepa-optimizer/
 
 | Resource | Description |
 |----------|-------------|
-| [API Reference](docs/api-reference.md) | Complete API documentation |
 | [Examples](examples/) | Practical examples and tutorials |
-| [Quick Start Guide](docs/quickstart.md) | Get started in 5 minutes |
-| [Configuration Guide](docs/configuration.md) | Advanced configuration options |
-| [Troubleshooting](docs/troubleshooting.md) | Common issues and solutions |
+| [Architecture diagrams](docs/architecture_diagrams.md) | Components and data flow |
+| [Clean architecture diagram](docs/clean_architecture_diagram.md) | Layered system view |
+| [Detailed implementation analysis](DETAILED_LLD_ANALYSIS.md) | Current implementation notes |
 
 ## 🎯 Use Cases
 
@@ -372,15 +377,21 @@ gepa-optimizer/
 - **🎨 Creative Writing**: Enhance prompts for creative and artistic tasks
 
 
-*Benchmarks run on standard text classification tasks with UI tree extraction*
+Performance depends on the model, dataset, evaluator, sample size, and
+optimization budget. This repository does not claim a universal improvement
+percentage; treat the included examples as experiments to reproduce and
+measure for a specific task.
 
 ## 🔒 Security & Privacy
 
-- **🔐 API Key Security**: Keys are never logged or stored in plain text
-- **🛡️ Data Privacy**: Your data never leaves your control
-- **🔒 Secure Connections**: All API calls use HTTPS/TLS encryption
-- **📋 Audit Trail**: Complete logging of optimization process
-- **🏢 Enterprise Ready**: SOC 2 compliance ready architecture
+- API keys can be loaded from environment variables or a local `.env` file;
+  `.env` files are excluded by `.gitignore`.
+- Prompts and evaluation samples are sent to the configured model provider.
+  Review that provider's data policy before using sensitive material.
+- Logs may contain prompts, model outputs, feedback, and scores. Do not use
+  confidential datasets without first configuring appropriate log handling.
+- This is an alpha research project. It has not undergone a security or
+  compliance audit.
 
 ## 🧪 Testing & Validation
 
@@ -440,11 +451,9 @@ class CustomerServiceEvaluator(BaseEvaluator):
 - **Categories**: ACCOUNT, ORDER, REFUND, CONTACT, INVOICE
 - **Sample Size**: 50 interactions for optimization
 
-**Expected Results:**
-- **Improvement**: 40-70% performance increase
-- **Prompt Evolution**: From simple 83-character prompt to detailed 2,000+ character guidelines
-- **Iterations**: 4-5 optimization iterations
-- **Time**: 2-5 minutes depending on configuration
+**Evaluation note:** results vary with the dataset, evaluator, model, and
+budget. Record the seed, configuration, baseline score, optimized score, and
+token usage when reporting an experiment.
 
 **Run the test:**
 ```bash
@@ -486,11 +495,8 @@ class TextGenerationEvaluator(BaseEvaluator):
 - **Format**: Input-output pairs for technical Q&A
 - **Size**: 2 detailed samples for testing
 
-**Expected Results:**
-- **Improvement**: 30-50% performance increase
-- **Prompt Evolution**: From basic assistant prompt to detailed technical guide
-- **Iterations**: 2-3 optimization iterations
-- **Time**: 1-3 minutes
+**Evaluation note:** use a held-out validation set and report the configured
+metrics rather than assuming a fixed improvement range.
 
 **Run the test:**
 ```bash
@@ -535,11 +541,8 @@ config = OptimizationConfig(
 - **Format**: Matching filenames between images and JSON files
 - **Content**: UI screenshots with corresponding element trees
 
-**Expected Results:**
-- **Improvement**: 20-40% performance increase
-- **Prompt Evolution**: From basic UI extraction to detailed element analysis
-- **Iterations**: 5-10 optimization iterations
-- **Time**: 5-15 minutes (longer due to vision processing)
+**Evaluation note:** vision-model results and cost depend on image complexity,
+provider latency, model choice, and the number of evaluation calls.
 
 **Run the test:**
 ```bash
@@ -548,11 +551,11 @@ python test_ui_optimization.py
 
 ### 🎯 Test Results Summary
 
-| Test File | Use Case | Adapter Type | Dataset | Expected Improvement | Time |
-|-----------|----------|--------------|---------|---------------------|------|
-| `test_customer_service_optimization.py` | Customer Service | Universal | Real CSV (50 samples) | 40-70% | 2-5 min |
-| `test_text_generation.py` | Text Generation | Universal | Technical Q&A (2 samples) | 30-50% | 1-3 min |
-| `test_ui_optimization.py` | UI Tree Extraction | Legacy | Screenshots + JSON | 20-40% | 5-15 min |
+| Test File | Use Case | Adapter Type | Dataset |
+|-----------|----------|--------------|---------|
+| `test_customer_service_optimization.py` | Customer Service | Universal | CSV sample |
+| `test_text_generation.py` | Text Generation | Universal | Technical Q&A |
+| `test_ui_optimization.py` | UI Tree Extraction | Legacy | Screenshots + JSON |
 
 ### 🔧 Test Configuration
 
@@ -633,7 +636,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **🐛 Issues**: [GitHub Issues](https://github.com/Suhas4321/Prompt-Optimizer/issues)
 - **💬 Discussions**: [GitHub Discussions](https://github.com/Suhas4321/Prompt-Optimizer/discussions)
 - **📧 Email**: s8hasgrylls@gmail.com
-- **📚 Documentation**: [Full Documentation](https://gepa-optimizer.readthedocs.io/)
+- **📚 Documentation**: [Repository documentation](docs/)
 
 ## 🌟 Star History
 
@@ -641,4 +644,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-** Made with ❤️ ** 
+** Made with ❤️ **
